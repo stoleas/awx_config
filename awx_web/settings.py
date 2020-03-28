@@ -45,6 +45,7 @@ EMAIL_PORT = 25
 EMAIL_HOST_USER = ''
 EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = False
+USE_X_FORWARDED_PORT = True
 
 LOGGING['handlers']['console'] = {
     '()': 'logging.StreamHandler',
@@ -98,4 +99,13 @@ CHANNEL_LAYERS = {
                 'CONFIG': {'url': BROKER_URL}}
 }
 
-USE_X_FORWARDED_PORT = True
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '{}:{}'.format(os.getenv("MEMCACHED_HOST", None),
+                                   os.getenv("MEMCACHED_PORT", "11211"))
+    },
+    'ephemeral': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+    },
+}
